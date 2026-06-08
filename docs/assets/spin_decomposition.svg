@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="430" viewBox="0 0 760 430" role="img" aria-labelledby="title desc">
+  <title id="title">Spin decomposition into gyrospin and effective spin</title>
+  <desc id="desc">The total spin vector is split into a component parallel to velocity and a component perpendicular to velocity.</desc>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#16a34a"/>
+    </marker>
+  </defs>
+  <rect width="760" height="430" fill="#ffffff"/>
+  <circle cx="305" cy="260" r="20" fill="#f8fafc" stroke="#111827" stroke-width="2"/>
+  <line x1="305" y1="260" x2="620" y2="260" stroke="#2563eb" stroke-width="5" marker-end="url(#arrow-blue)"/>
+  <text x="625" y="267" fill="#2563eb" font-family="Arial, sans-serif" font-size="21" font-weight="700">velocity direction u_v</text>
+  <line x1="305" y1="260" x2="515" y2="105" stroke="#7c3aed" stroke-width="5" marker-end="url(#arrow-purple)"/>
+  <text x="520" y="108" fill="#7c3aed" font-family="Arial, sans-serif" font-size="21" font-weight="700">total spin omega</text>
+  <line x1="305" y1="260" x2="505" y2="260" stroke="#dc2626" stroke-width="4" marker-end="url(#arrow-red)"/>
+  <text x="390" y="292" fill="#dc2626" font-family="Arial, sans-serif" font-size="19" font-weight="700">parallel spin</text>
+  <text x="390" y="316" fill="#dc2626" font-family="Arial, sans-serif" font-size="17">gyrospin, no lift here</text>
+  <line x1="505" y1="260" x2="505" y2="110" stroke="#16a34a" stroke-width="4" marker-end="url(#arrow-green)"/>
+  <text x="415" y="90" fill="#16a34a" font-family="Arial, sans-serif" font-size="19" font-weight="700">effective spin omega_perp</text>
+  <line x1="515" y1="105" x2="505" y2="110" stroke="#9ca3af" stroke-width="2" stroke-dasharray="6 6"/>
+  <line x1="515" y1="105" x2="505" y2="260" stroke="#9ca3af" stroke-width="2" stroke-dasharray="6 6"/>
+  <text x="80" y="68" fill="#111827" font-family="Arial, sans-serif" font-size="22" font-weight="700">Vector split used by the code</text>
+  <text x="80" y="103" fill="#111827" font-family="Arial, sans-serif" font-size="20">omega_perp = omega - (omega dot u_v) u_v</text>
+  <text x="80" y="132" fill="#4b5563" font-family="Arial, sans-serif" font-size="18">Only omega_perp goes into the spin parameter and lift direction.</text>
+</svg>
