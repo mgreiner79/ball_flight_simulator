@@ -4,6 +4,12 @@ This tutorial explains the physics and math behind `ball_flight`, then maps each
 
 The level is meant to sit between advanced high school physics and early university mechanics: we will use vectors, trigonometry, Newton's second law, differential equations, and numerical integration, but each piece is introduced from the ground up.
 
+The vector/force diagrams in this tutorial are rendered from PyVista 3D scenes. To regenerate those PNGs, run:
+
+```powershell
+.\.venv\Scripts\python.exe docs\render_tutorial_images.py
+```
+
 ## 1. What The Simulator Is Modeling
 
 A pitched baseball is treated as a small rigid sphere moving through air. At every instant, the code tracks:
@@ -29,7 +35,7 @@ The code uses a camera-friendly 3D coordinate system:
 - `+Y`: up
 - `+Z`: forward, from the pitcher toward home plate
 
-![Coordinate system](assets/coordinate_system.svg)
+![Coordinate system](assets/coordinate_system_pyvista.png)
 
 This convention is documented at the top of [`simulator.py`](../src/ball_flight/simulator.py). It matters because signs determine whether a force moves the ball up/down, left/right, or forward/backward.
 
@@ -73,6 +79,12 @@ self.phi = np.radians(phi)
 
 Why radians? Most math libraries, including NumPy's `sin` and `cos`, expect radians.
 
+The launch angles behave like polar/spherical coordinates for the initial velocity vector:
+
+![Launch polar coordinates](assets/polar_coordinates_pyvista.png)
+
+In this picture, `phi` is measured in the horizontal X/Z plane and sets the side-to-side direction of the pitch. `theta` lifts the velocity vector out of that horizontal plane. The gray line is the horizontal projection of the initial velocity.
+
 The velocity components are:
 
 ```text
@@ -114,7 +126,7 @@ a = F_net / m
 
 The simulator computes forces first, then acceleration.
 
-![Forces on the ball](assets/forces_on_ball.svg)
+![Forces on the ball](assets/forces_on_ball_pyvista.png)
 
 The net force is:
 
@@ -265,6 +277,12 @@ The code first describes spin in a local coordinate frame attached to the initia
 
 This happens in `_init_spin_vector()`.
 
+The spin-axis angles are also polar-coordinate-like, but they live in the local pitch frame rather than the global field frame:
+
+![Spin-axis polar coordinates](assets/spin_axis_polar_coordinates_pyvista.png)
+
+The purple arrow is the spin axis vector `omega`. The orange arc is `spin_azimuth`, the green arc is `spin_elevation`, and the yellow curved tube with a cone head shows the sense of rotation around the spin axis.
+
 ### Step 1: Normalize The Initial Velocity
 
 The initial velocity direction is:
@@ -335,7 +353,7 @@ This is one of the most important physics ideas in the simulator.
 
 Not all spin creates lift. Only the component of spin perpendicular to the velocity contributes to Magnus lift in this model.
 
-![Spin decomposition](assets/spin_decomposition.svg)
+![Spin decomposition](assets/spin_decomposition_pyvista.png)
 
 Let:
 
@@ -534,7 +552,21 @@ dv/dt = a
 
 Computers simulate this by taking small time steps. The simulator uses a fixed step size `dt`.
 
-![Integration loop](assets/integration_loop.svg)
+```mermaid
+flowchart TD
+    A["Current state<br/>position, velocity, time"] --> B["Compute speed"]
+    B --> C["Compute drag<br/>F_d = 0.5 rho v^2 C_d A"]
+    C --> D["Compute effective spin<br/>remove spin along velocity"]
+    D --> E["Compute lift<br/>S, C_l, F_l"]
+    E --> F["Compute acceleration<br/>a = F_net / m"]
+    F --> G["Update velocity<br/>v_next = v + a dt"]
+    G --> H["Update position<br/>x_next = x + v_next dt"]
+    H --> I{"Did y_next cross 0?"}
+    I -- "no" --> J["Store next state"]
+    J --> A
+    I -- "yes" --> K["Interpolate impact<br/>final y = 0"]
+    K --> L["Store final trajectory sample"]
+```
 
 ### Semi-Implicit Euler
 
@@ -824,4 +856,3 @@ A more advanced baseball simulator could add:
 - uncertainty models for measured camera data.
 
 The current code is a clean foundation for those additions because the physics core is now separate from plotting and scene tools.
-
